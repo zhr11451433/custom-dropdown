@@ -1,0 +1,182 @@
+/* ============================================================
+   自定义下拉菜单 — 样式表
+   阅读提示：
+     每段都标了编号 ① ② ③ …，和 index.html 的结构一一对应。
+     被修改的地方用「旧写法：」注释保留在旁边，方便对比；学完可以清掉。
+   ============================================================ */
+
+
+/* ---------- 全局重置 ---------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* ============ ① 页面居中容器：只负责居中，不参与组件状态 ============ */
+.top_box {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* ============ ② 组件根容器：状态类挂在这里，也是列表的定位参照 ============ */
+.box {
+    display: flex;
+    flex-direction: column;
+    position: relative;   /* 关键：给绝对定位的列表当"坐标原点"，
+                             没有它，top: calc(100% + 10px) 会相对更外层祖先
+                             甚至视口定位，列表会飞到页面角落 */
+
+    /* 【修改】旧写法：gap: 10px;
+       为什么删掉：ul 改成 position: absolute 后脱离文档流，
+       flex 的 gap 只作用于"还在文档流里"的成员，所以这 10px 已经失效了。
+       触发器与列表之间的间隙，改由列表自己的 top: calc(100% + 10px) 控制。 */
+}
+
+/* 【修改】旧写法：这里又写了一遍 .box { position: relative; }
+   和上面的 .box 规则重复了，已合并上去 —— 同一个选择器写两遍
+   会让样式表越来越难读，看到就要合并掉。 */
+
+
+/* ============ ③ 触发器（按钮） ============ */
+.select_item {
+    width: 200px;
+    height: 33px;
+    padding: 0 12px;                    /* button 被 * 重置清了内边距，要补回来 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;     /* 两端撑开：文字靠左、箭头靠右 */
+    gap: 8px;                           /* 文字和箭头之间的最小间距 */
+
+    border: 2px solid black;
+    border-radius: 10px;
+    background: #fff;                   /* button 默认是灰底，要盖掉 */
+    font: inherit;                      /* button 的 font-family 不继承，要显式要回来 */
+    font-size: 15px;                    /* 【修改】旧值 20px：33px 高的框塞 20px 字太挤，
+                                           按 mockup 比例（390×62 → 200×33）约 14–15px */
+    cursor: pointer;
+}
+
+/* 触发器里的文字：太长时不换行、超出部分变省略号 */
+/* 【修改】旧写法是单独一段 .select_text，现在和 .option_text 合并，
+   因为两者的需求完全一样（都是"会变长的一行文字"） */
+.select_text,
+.option_text {
+    overflow: hidden;          /* 超出容器就裁掉 */
+    white-space: nowrap;       /* 不换行 */
+    text-overflow: ellipsis;   /* 裁掉的部分显示 … */
+}
+
+/* 箭头：同一个元素，靠旋转表达"开 / 合" */
+.arrow {
+    flex-shrink: 0;            /* 文字太长时别把箭头挤扁 */
+    font-size: 14px;           /* 箭头通常比正文小一点 */
+    line-height: 1;
+    transition: transform .2s ease;
+}
+
+/* 展开时箭头翻转 180°：HTML 里写的是朝下的 ▾，转一下就成朝上的 ▴ */
+.box.is-open .arrow {
+    transform: rotate(180deg);
+}
+
+
+/* ============ ④ 列表容器（浮层） ============ */
+.item_box {
+    position: absolute;          /* 脱离文档流：浮在内容之上，不顶开下面的元素 */
+    top: calc(100% + 10px);      /* 100% = .box 的高度（= 触发器底部），+10px 是间隙 */
+    left: 0;
+    width: 100%;                 /* 跟随 .box 宽度，不再写死 200px */
+
+    display: none;               /* 默认隐藏 —— 所以页面一打开就是"关闭态"，
+                                    这一行不依赖任何 JS */
+    list-style: none;            /* 去掉列表圆点（别依赖"因为 li 是 flex 所以没圆点"这种巧合） */
+    border: 2px solid black;
+    border-radius: 10px;
+    overflow: hidden;            /* 让 li 的直角被 ul 的圆角裁掉，
+                                    以后给 li 加 hover 背景色就不会戳出圆角外面 */
+}
+
+/* 【修改】旧写法（和上面重复，已合并）：
+   .item_box {
+       height: 165px;          ← 问题所在！固定高度 + 行高不自适应，
+                                  5 行撑不满 165px，列表底部会空出一块。
+                                  列表高度应该由内容决定，所以删掉。
+       border-radius: 10px;
+       border: 2px solid black;
+   } */
+
+/* 展开态：JS 只负责在 .box 上切换 is-open 类，显示与否由这里决定 */
+.box.is-open .item_box {
+    display: block;
+}
+
+
+/* ============ ⑤ 选项行 ============ */
+/* 【重要】上一版这一段整段弄丢了 —— 分隔线、行高、对齐全靠它 */
+.item_box li {
+    height: 33px;                    /* 与触发器等高（mockup 里行高≈触发器高度） */
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;  /* 文字靠左、勾靠右 */
+    font-size: 15px;
+    cursor: pointer;                 /* 鼠标移上去变手型，暗示"这里能点" */
+}
+
+/* 【修改】旧写法：
+   .item_box li {
+       width: 200px;              ← 冗余：li 在 ul 里会自动撑满整行宽度，
+                                    宽度只该在触发器上定义一次，否则改宽度要改好几处
+       justify-content: center;   ← 文字居中；mockup 是"文字靠左、勾靠右"
+       border-bottom: 2px solid black;   ← 见下面用相邻兄弟选择器的写法
+   }
+   .item_box li:last-child { border: none; }   ← 用 li + li 就不需要这个例外了 */
+
+/* 分隔线：相邻兄弟选择器 "+" 表示"紧跟在另一个 li 后面的 li"，
+   所以从第 2 行开始才有顶线，天然不需要处理第 1 行和最后一行 */
+.item_box li + li {
+    border-top: 2px solid black;
+}
+
+/* 悬停反馈：mockup 是静态图、看不到 hover 状态，
+   但真实控件必须有反馈 —— 这是设计稿没写、你也要自己补的东西 */
+.item_box li:hover {
+    background: #f2f2f2;
+}
+
+
+/* ============ ⑥ 选中标记（黑底白勾圆圈） ============ */
+/* 用 visibility 而不是 display：
+   visibility: hidden 的元素不占位"可见"但保留布局位置、不可聚焦、读屏器也不读，
+   正好符合"勾只在选中项上出现"的需求 */
+.check {
+    visibility: hidden;      /* 默认整圈都看不见 */
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;      /* 50% = 圆 */
+    background: #111;
+    color: #fff;
+    font-size: 11px;
+    flex-shrink: 0;          /* 别被长文字挤扁 */
+    display: flex;
+    align-items: center;     /* 这两行把 ✓ 在圆圈里居中 */
+    justify-content: center;
+}
+
+/* 选中的那一行，勾才显示出来 */
+.item_box li.is-selected .check {
+    visibility: visible;
+}
+
+
+/* ============================================================
+   下一步（阶段 5：键盘 + 可访问性）会往这里加：
+     .select_item:focus-visible { ... }   ← 键盘聚焦时的可见轮廓
+   现在先不做，因为鼠标点击也会触发 :focus，看起来会很怪。
+   ============================================================ */

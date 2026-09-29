@@ -1,0 +1,70 @@
+{
+  "unit": {
+    "name": "memory_project_vji7wu",
+    "version": 1
+  },
+  "global": null,
+  "tables": {
+    "blocks": {
+      "f3cb9f6a-e013-40ff-b034-e74cac26212f": {
+        "namespace": "project",
+        "status": "suggested",
+        "injected": false,
+        "content": "用户在 F:\\dropdown（roadmap.sh Custom Dropdown 练习项目）要求以「指导 + review」为主，不代写完整方案或成品文件：AI 负责讲概念、拆步骤、审结构、定位 bug。用户已学过事件监听、能自搭 HTML/CSS 骨架；卡住时允许提供「关键代码」片段（机制性部分如 CSS 状态类驱动、JS 状态变量+render+事件委托骨架），可由用户自行推导的部分留 TODO，由他自己补完并理解。用户目标是锻炼前端能力，而非快速拿到成品。",
+        "keywords": [
+          "dropdown",
+          "教学方式",
+          "关键代码",
+          "前端练习",
+          "review为主"
+        ],
+        "createdAt": 1790575241742,
+        "updatedAt": 1790578067134
+      },
+      "9bf0502c-f99a-4c08-952a-049f96c7786f": {
+        "namespace": "project",
+        "status": "suggested",
+        "injected": false,
+        "content": "F:\\dropdown 项目环境限制：pwsh 沙箱无外网访问（Invoke-WebRequest 报「基础连接已关闭」，curl 报 schannel SEC_E_NO_CREDENTIALS），浏览器驱动也未注册（browser_open 报 no usable browser provider）。因此外部图片/页面（如 roadmap.sh 的 mockup 图）无法由 AI 抓取查看，需要用户自己读图或贴文字描述。",
+        "keywords": [
+          "沙箱无外网",
+          "browser 不可用",
+          "dropdown",
+          "环境限制"
+        ],
+        "createdAt": 1790575480297,
+        "updatedAt": 1790575480297
+      },
+      "37656ec9-22f2-4438-8318-d7ee802be07f": {
+        "namespace": "project",
+        "status": "suggested",
+        "injected": false,
+        "content": "F:\\dropdown 项目结构与约定（指导中确定）：组件层级 = 页面居中容器 → 组件容器（挂状态类 + 作为「点击外部关闭」的判定边界）→ 触发器（建议 button type=\"button\"）+ 列表容器（装全部选项，默认隐藏）→ N 个选项（共用同一个类名，便于事件委托）。状态设计：不做三选一枚举，用「是否展开」+「当前选中值」两个正交变量，视觉三态由二者组合推导。渲染原则：JS 只切 class 与改变量，不直接改 style；列表显隐先用 display:none 切换；列表用绝对定位，必须有相对定位父级作参照。",
+        "keywords": [
+          "dropdown",
+          "组件层级",
+          "状态设计",
+          "class驱动样式",
+          "绝对定位"
+        ],
+        "createdAt": 1790576721201,
+        "updatedAt": 1790576721201
+      },
+      "249bc9a1-0f36-4a5c-8ca5-78ef1d1207e4": {
+        "namespace": "project",
+        "status": "suggested",
+        "injected": false,
+        "content": "F:\\dropdown 项目的后续学习路线已与用户商定：①做完本项目剩余部分（点击外部关闭 + 可选键盘/ARIA）②按「JS 必会清单」补齐基础（引用类型、this、数组方法、可选链/空值合并、事件冒泡与委托、createElement、Promise/async/fetch、ES 模块）③学 TS 只从「给变量/函数/参数加类型」入手，不先啃泛型 ④学 Vue 3 + <script setup> ⑤过渡项目=用 Vue 重写这个自定义下拉菜单（对比手写 render() 与 Vue 响应式）。核心教学论点：手写的 render() 就是 Vue 响应式的原理，跳过 DOM 事件层直接学 Vue 会在调试时失去定位能力。",
+        "keywords": [
+          "dropdown",
+          "学习路线",
+          "ts",
+          "vue",
+          "render与响应式"
+        ],
+        "createdAt": 1790649494192,
+        "updatedAt": 1790649494192
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 【新增】响应式必需：让页面宽度跟随设备宽度，而不是按 980px 虚拟宽度缩放 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>custom-dropdown</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- defer：等 HTML 解析完再执行脚本，所以脚本放 <head> 里也安全，
+         而且比写在 </body> 前更清晰 -->
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- ========== ① 页面居中容器：只负责把组件摆到屏幕中间 ========== -->
+<div class="top_box">
+
+    <!-- ========== ② 组件根容器：状态类 is-open 挂在这里 ========== -->
+    <div class="box">
+
+        <!-- ========== ③ 触发器：唯一可聚焦的元素 ========== -->
+        <button type="button" class="select_item">
+            <span class="select_text">Select an Item</span>
+
+            <!-- 【修改】箭头符号
+                 旧写法：<span class="arrow" aria-hidden="true">^</span>
+                 问题：^ 是"键盘脱字符"，不是箭头。而且它本身朝上，
+                       展开时再旋转 180° 就变成朝下 —— 和 mockup 正好相反。
+                 正确思路：HTML 里放"关闭态"的样子（朝下 ▾），
+                           展开时由 CSS 旋转 180°，自然变成朝上 ▴。
+                 aria-hidden="true"：这是装饰，别让读屏器念"黑色向下小三角"。 -->
+            <span class="arrow" aria-hidden="true">▾</span>
+        </button>
+
+        <!-- ========== ④ 列表容器（浮层）：默认隐藏，展开时由 CSS 显示 ========== -->
+        <ul class="item_box">
+            <!-- 【新增】data-value：把「值」和「显示文字」分开存。
+                 以后取选中值用 li.dataset.value，不要用 li.textContent
+                 —— textContent 会把右边勾的字符一起读进来。
+
+                 【新增】两个 span 的作用：
+                   .option_text → 显示文字（太长时能变省略号）
+                   .check       → 右侧黑底白勾，只有选中项才可见 -->
+            <li data-value="Item 1">
+                <span class="option_text">Item 1</span>
+                <span class="check" aria-hidden="true">✓</span>
+            </li>
+            <li data-value="Item 2">
+                <span class="option_text">Item 2</span>
+                <span class="check" aria-hidden="true">✓</span>
+            </li>
+            <li data-value="Item 3">
+                <span class="option_text">Item 3</span>
+                <span class="check" aria-hidden="true">✓</span>
+            </li>
+            <li data-value="Item 4">
+                <span class="option_text">Item 4</span>
+                <span class="check" aria-hidden="true">✓</span>
+            </li>
+            <li data-value="Item 5">
+                <span class="option_text">Item 5</span>
+                <span class="check" aria-hidden="true">✓</span>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+</body>
+</html>
